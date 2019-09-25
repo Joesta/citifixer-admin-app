@@ -23,49 +23,50 @@
         android:layout_margin="16dp">
 
         <Button
-            android:id="@+id/btnListUsers"
+            android:id="@+id/btnListReports"
             android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="List Users"
+            android:text="List Reports"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             />
 
         <Button
-            android:id="@+id/btnListConstructors"
+            android:id="@+id/btnRemoveReports"
             android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="List Constructors"
-            app:layout_constraintTop_toBottomOf="@id/btnListUsers"
+            android:text="Remove All Reports"
+            app:layout_constraintTop_toBottomOf="@id/btnListReports"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             />
 
         <Button
-            android:id="@+id/btnListEngineer"
+            android:id="@+id/btnAssignReport"
             android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="List Engineers"
-            app:layout_constraintTop_toBottomOf="@id/btnListConstructors"
+            android:text="Assign reports"
+            app:layout_constraintTop_toBottomOf="@id/btnRemoveReports"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"
             />
 
         <Button
-            android:id="@+id/btnAddEngineer"
+            android:id="@+id/btnGenerateReports"
             android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="Add Engineer"
-            app:layout_constraintTop_toBottomOf="@id/btnListEngineer"
+            android:text="Generate Report file"
+            app:layout_constraintTop_toBottomOf="@id/btnAssignReport"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             />

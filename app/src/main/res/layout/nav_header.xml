@@ -19,7 +19,7 @@
         android:layout_marginTop="2dp"
         android:contentDescription="profile picture"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:src="@drawable/propic"
+        android:src="@drawable/imageholder"
         app:civ_border_color="#00695C"
         app:civ_border_width="2dp" />
 

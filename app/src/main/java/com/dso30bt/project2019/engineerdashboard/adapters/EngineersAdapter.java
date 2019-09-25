@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.dso30bt.project2019.engineerdashboard.R;
-import com.dso30bt.project2019.engineerdashboard.models.User;
+import com.dso30bt.project2019.engineerdashboard.models.Engineer;
 
 import java.util.List;
 
@@ -17,15 +17,15 @@ import androidx.recyclerview.widget.RecyclerView;
 /**
  * Created by Joesta on 2019/09/16.
  */
-public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> {
+public class EngineersAdapter extends RecyclerView.Adapter<EngineersAdapter.ViewHolder> {
 
     private Context context;
     private View view;
-    private List<User> userList;
+    private List<Engineer> engineerList;
 
-    public UsersAdapter(Context context, List<User> userList) {
+    public EngineersAdapter(Context context, List<Engineer> engineerList) {
         this.context = context;
-        this.userList = userList;
+        this.engineerList = engineerList;
     }
 
     @NonNull
@@ -37,13 +37,13 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final String fullName = userList.get(position).getFirstName() + " " + userList.get(position).getLastName();
+        final String fullName = engineerList.get(position).getFirstName() + " " + engineerList.get(position).getLastName();
         holder.tvFullName.setText(fullName);
     }
 
     @Override
     public int getItemCount() {
-        return userList.size();
+        return engineerList.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

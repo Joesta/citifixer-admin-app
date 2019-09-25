@@ -1,13 +1,11 @@
-package com.dso30bt.project2019.potapp.activities;
+package com.dso30bt.project2019.engineerdashboard.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.dso30bt.project2019.potapp.BuildConfig;
-import com.dso30bt.project2019.potapp.R;
-import com.dso30bt.project2019.potapp.utils.NavUtil;
-import com.dso30bt.project2019.potapp.utils.Utils;
+import com.dso30bt.project2019.engineerdashboard.BuildConfig;
+import com.dso30bt.project2019.engineerdashboard.R;
+import com.dso30bt.project2019.engineerdashboard.utils.NavUtil;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;

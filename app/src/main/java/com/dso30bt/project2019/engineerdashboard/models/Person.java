@@ -1,9 +1,8 @@
-package com.dso30bt.project2019.potapp.models;
+package com.dso30bt.project2019.engineerdashboard.models;
 
 import java.io.Serializable;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
@@ -11,7 +10,6 @@ import lombok.ToString;
  */
 @Data
 @ToString
-@EqualsAndHashCode
 public class Person implements Serializable {
     private int userId;
     private String firstName;
@@ -39,5 +37,19 @@ public class Person implements Serializable {
         this.emailAddress = emailAddress;
         this.role = role;
         this.cellNumber = cellNumber;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Person) {
+            if (this.idNumber.equals(((Person) obj).getIdNumber())
+                    || this.emailAddress.equals(((Person) obj).getEmailAddress())) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        return false;
     }
 }

@@ -1,4 +1,4 @@
-package com.dso30bt.project2019.potapp.models;
+package com.dso30bt.project2019.engineerdashboard.models;
 
 import java.util.List;
 
@@ -12,7 +12,6 @@ import lombok.ToString;
 
 @Data
 @ToString
-@EqualsAndHashCode(callSuper = false)
 public class User extends Person {
     private String imageUrl;
     private List<Report> reportList;

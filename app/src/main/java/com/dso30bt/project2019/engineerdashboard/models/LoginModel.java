@@ -1,4 +1,4 @@
-package com.dso30bt.project2019.potapp.models;
+package com.dso30bt.project2019.engineerdashboard.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

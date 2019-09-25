@@ -1,8 +1,7 @@
-package com.dso30bt.project2019.potapp.models;
+package com.dso30bt.project2019.engineerdashboard.models;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,4 +28,17 @@ public class Report implements Serializable {
     private Status status;
     private Date reportDate;
     private Pothole pothole;
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Report) {
+            if (this.reportDate.equals(((Report) obj).getReportDate())) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        return false;
+    }
 }

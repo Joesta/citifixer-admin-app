@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -9,6 +10,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -16,13 +18,63 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
+    //  tests
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
     testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:1.10.19'
+
+    // multi dex
+    implementation 'androidx.multidex:multidex:2.0.1'
+
     androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
+    compileOnly 'org.projectlombok:lombok:1.18.8'
+    annotationProcessor 'org.projectlombok:lombok:1.18.8'
+
+    // firebase
+    implementation 'com.google.firebase:firebase-analytics:17.0.1'
+    implementation 'com.google.firebase:firebase-database:18.0.0'
+    implementation 'com.google.firebase:firebase-auth:18.0.0'
+    implementation 'com.google.firebase:firebase-storage:18.0.0'
+    implementation 'com.google.firebase:firebase-core:17.0.0'
+    implementation 'com.google.firebase:firebase-firestore:20.1.0'
+
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0-beta01'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0-beta01'
+    implementation 'com.google.android.material:material:1.0.0-beta01'
+    implementation 'androidx.cardview:cardview:1.0.0-beta01'
+
+    // textpdf
+    implementation 'com.itextpdf:itextg:5.5.10'
+
+    //rx persmission
+    implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
+
+    //circular image
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
+
+    // snacky
+    implementation 'com.github.matecode:Snacky:1.1.4'
+
+    // material
+    implementation 'com.google.android.material:material:1.0.0'
+
+    implementation 'androidx.cardview:cardview:1.0.0-beta01'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+    // google location services
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
+
 }
+
+apply plugin: 'com.google.gms.google-services'

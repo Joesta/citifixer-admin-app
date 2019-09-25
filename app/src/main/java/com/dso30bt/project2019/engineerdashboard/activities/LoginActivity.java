@@ -1,4 +1,4 @@
-package com.dso30bt.project2019.potapp.activities;
+package com.dso30bt.project2019.engineerdashboard.activities;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -8,11 +8,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.dso30bt.project2019.potapp.R;
-import com.dso30bt.project2019.potapp.models.LoginModel;
-import com.dso30bt.project2019.potapp.repository.UserImpl;
-import com.dso30bt.project2019.potapp.utils.NavUtil;
-import com.dso30bt.project2019.potapp.utils.SharedPreferenceManager;
+import com.dso30bt.project2019.engineerdashboard.R;
+import com.dso30bt.project2019.engineerdashboard.models.LoginModel;
+import com.dso30bt.project2019.engineerdashboard.repository.UserImpl;
+import com.dso30bt.project2019.engineerdashboard.utils.NavUtil;
+import com.dso30bt.project2019.engineerdashboard.utils.SharedPreferenceManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -42,18 +42,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         registerButtons();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d(TAG, "onStart: It gets here then move on");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        isUserLoggedIn();
-    }
-
     /***
      * check is user is logged in before using the app
      */
@@ -72,7 +60,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         textInputEmailAddress = findViewById(R.id.textInputEmail);
         textInputPassword = findViewById(R.id.textInputPassword);
         btnLogin = findViewById(R.id.btnLogin);
-        btnSignUp = findViewById(R.id.btnSignUp);
     }
 
     /***
@@ -80,7 +67,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      */
     private void registerButtons() {
         this.btnLogin.setOnClickListener(this);
-        this.btnSignUp.setOnClickListener(this);
     }
 
     /***
@@ -148,21 +134,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Log.d(TAG, "onClick: attempting to login");
                 attemptLogin();
                 break;
-            case R.id.btnSignUp:
-                gotoSignUp();
-                break;
             default:
                 break;
         }
     }
 
-    /**
-     * goes to signUp activity
-     */
-    private void gotoSignUp() {
-        Log.d(TAG, "gotoSignUp: We are going to signUp activity");
-        NavUtil.moveToNextActivity(LoginActivity.this, SignUpActivity.class);
-    }
 
     private void attemptLogin() {
         getUserLoginInput();
@@ -189,11 +165,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      * @param password user password
      */
     private void authenticateUser(String emailAddress, String password) {
-        // start login button animation
-        //Utils.startAnimation(true, btnLogin, LoginActivity.this);
-
+//        NavUtil.moveToNextActivity(this, MainActivity.class);
         UserImpl userImp = new UserImpl(LoginActivity.this);
         userImp.loginUserByEmail(new LoginModel(emailAddress, password));
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: It gets here then move on");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isUserLoggedIn();
     }
 }

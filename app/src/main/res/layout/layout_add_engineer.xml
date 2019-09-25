@@ -143,17 +143,13 @@
             android:textSize="16dp"
             android:textColor="#555" />
 
-        <EditText
-            android:id="@+id/etGender"
+        <Spinner
+            android:id="@+id/spinnerGender"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text=""
             android:fontFamily="serif"
             android:textSize="16dp"
-            android:inputType="number"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:textColor="#555"
+            android:entries="@array/gender"
             android:layout_marginTop="5dp"
             android:layout_marginStart="@dimen/margin_start_et_dialog" />
     </androidx.cardview.widget.CardView>

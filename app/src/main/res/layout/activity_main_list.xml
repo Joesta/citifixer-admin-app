@@ -9,19 +9,22 @@
         android:layout_height="match_parent"
         android:layout_margin="16dp">
 
-        <ListView
-            android:id="@+id/lvMain"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipChildren="false"
             android:clipToPadding="false"
-            android:divider="@color/colorPrimaryDark"
-            android:dividerHeight="2dp"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="10dp"
             android:paddingBottom="16dp"
+            android:clickable="true"
+            android:onClick="clickEvent"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:paddingTop="16dp"
-            android:visibility="visible" />
+            android:scrollbars="none"
+            android:focusable="true" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

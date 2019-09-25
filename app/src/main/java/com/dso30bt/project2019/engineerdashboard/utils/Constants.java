@@ -1,4 +1,4 @@
-package com.dso30bt.project2019.potapp.utils;
+package com.dso30bt.project2019.engineerdashboard.utils;
 
 /**
  * Created by Joesta on 2019/05/30.
@@ -15,6 +15,7 @@ public class Constants {
     public static final String USER_COLLECTION = "users";
     public static final String CONSTRUCTOR_COLLECTION = "constructors";
     public static final String REPORT_COLLECTION = "reports";
+    public static final String ENGINEER_COLLECTION = "engineers";
     public static final String POTHOLE_COLLECTION = "potholes";
 
 

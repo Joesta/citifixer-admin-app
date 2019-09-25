@@ -210,19 +210,6 @@
                 android:textSize="16sp"
                 android:textColor="#555" />
 
-            <Spinner
-                android:id="@+id/spinnerStatus"
-                android:layout_width="200dp"
-                android:layout_height="match_parent"
-                android:text="Available"
-                android:fontFamily="serif"
-                android:entries="@array/constructor_status"
-                android:textSize="16sp"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:textColor="#555"
-                android:layout_marginTop="5dp"
-                android:layout_marginStart="160dp" />
         </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

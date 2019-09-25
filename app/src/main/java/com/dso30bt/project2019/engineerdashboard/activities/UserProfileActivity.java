@@ -1,4 +1,4 @@
-package com.dso30bt.project2019.potapp.activities;
+package com.dso30bt.project2019.engineerdashboard.activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,7 +11,6 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,17 +18,13 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.dso30bt.project2019.potapp.R;
-import com.dso30bt.project2019.potapp.models.Constructor;
-import com.dso30bt.project2019.potapp.models.Person;
-import com.dso30bt.project2019.potapp.models.Role;
-import com.dso30bt.project2019.potapp.models.User;
-import com.dso30bt.project2019.potapp.models.enums.RoleEnum;
-import com.dso30bt.project2019.potapp.models.enums.UserEnum;
-import com.dso30bt.project2019.potapp.utils.Constants;
-import com.dso30bt.project2019.potapp.utils.NavUtil;
-import com.dso30bt.project2019.potapp.utils.SharedPreferenceManager;
-import com.dso30bt.project2019.potapp.utils.Utils;
+import com.dso30bt.project2019.engineerdashboard.R;
+import com.dso30bt.project2019.engineerdashboard.models.Engineer;
+import com.dso30bt.project2019.engineerdashboard.models.Person;
+import com.dso30bt.project2019.engineerdashboard.utils.Constants;
+import com.dso30bt.project2019.engineerdashboard.utils.NavUtil;
+import com.dso30bt.project2019.engineerdashboard.utils.SharedPreferenceManager;
+import com.dso30bt.project2019.engineerdashboard.utils.Utils;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -61,13 +56,12 @@ import static android.view.View.GONE;
  */
 public class UserProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
+    public static final String ENGINEER_COLLECTIONS = "engineers";
     /*activity members*/
     private static final String TAG = "UserProfileActivity";
     private static final int REQUEST_TAKE_PHOTO = 2;
-
     /*firebase*/
     FirebaseStorage mStorage = FirebaseStorage.getInstance();
-
     //widgets
     /*text views*/
     private TextView mTvFirstName;
@@ -79,23 +73,17 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     private EditText mLastNameEntry;
     private EditText mCellNumberEntry;
     private EditText mEmailEntry;
-
     /*progress bar*/
     private ProgressBar mProgressBar;
-
     /*spinner*/
     private Spinner mSpinnerStatus;
-
     /*buttons*/
     private Button mBtnStatus;
     private Button mBtnProfileEdit;
-
     /*circular image*/
     private CircleImageView user_propic;
-
     /*adapter*/
     private ArrayAdapter<CharSequence> mSpinnerAdapter;
-
     /*vars*/
     private String mCollection;
     private String mCurrentPhotoPath;
@@ -121,21 +109,8 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         mTvCellNumber = findViewById(R.id.tvCellnumber);
         mTvEmail = findViewById(R.id.tvEmail);
         mProgressBar = findViewById(R.id.progressbar);
-        mSpinnerStatus = findViewById(R.id.spinnerStatus);
         user_propic = findViewById(R.id.user_propic);
         mBtnProfileEdit = findViewById(R.id.btnProfileEdit);
-
-        mSpinnerStatus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mSelectedItemPosition = position;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                return;
-            }
-        });
 
         mBtnStatus = findViewById(R.id.btnStatus);
         mBtnStatus.setOnClickListener(UserProfileActivity.this);
@@ -152,18 +127,8 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         showOrHideEditButton(View.GONE);
         showOrHideProgressBar(View.VISIBLE);
 
-        int flag = SharedPreferenceManager.getFlag(UserProfileActivity.this);
-
-        if (flag == UserEnum.USER.ordinal()) {
-            mCollection = Constants.USER_COLLECTION;
-            hideViews();
-
-        } else if (flag == UserEnum.CONSTRUCTOR.ordinal()) {
-            mCollection = Constants.CONSTRUCTOR_COLLECTION;
-        }
-
         FirebaseFirestore.getInstance()
-                .collection(mCollection)
+                .collection("engineers")
                 .document(SharedPreferenceManager.getEmail(this))
                 /*listen ro changes in the document in real time*/
                 .addSnapshotListener(UserProfileActivity.this, (snapshot, error) -> {
@@ -176,26 +141,8 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
 
                     if (snapshot != null && snapshot.exists()) {
                         // get role
-                        Role role = snapshot.get("role", Role.class);
-                        // save check if user is not deleted while still using the App
-                        if (role == null) {
-                            // take user to login. Account must have been deleted while using the app
-                            takeUserToLogin();
-
-                        } else {
-
-                            if (role.getRoleDescription().equalsIgnoreCase(RoleEnum.User.role)) {
-                                //user
-                                User user = snapshot.toObject(User.class);
-                                assert user != null;
-                                setUserProfileDetails(user);
-                            } else {
-                                // constructor
-                                Constructor constructor = snapshot.toObject(Constructor.class);
-                                assert constructor != null;
-                                setUserProfileDetails(constructor);
-                            }
-                        }
+                        Engineer engineer = snapshot.toObject(Engineer.class);
+                        setUserProfileDetails(engineer);
 
                     } else {
 
@@ -236,22 +183,13 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         mTvCellNumber.setText(person.getCellNumber());
         mTvEmail.setText(person.getEmailAddress());
 
-        if (person instanceof User) {
-            User user = (User) person;
-            if (user.getImageUrl().equals("")) {
-                user_propic.setImageResource(R.drawable.imageholder);
-            } else {
-                loadProfilePic(user.getImageUrl());
-            }
-
+        Engineer engineer = (Engineer) person;
+        if (engineer.getImageUrl().equals("")) {
+            user_propic.setImageResource(R.drawable.imageholder);
         } else {
-            Constructor constructor = ((Constructor) person);
-            if (constructor.getImageUrl().equals("")) {
-                user_propic.setImageResource(R.drawable.imageholder);
-            } else {
-                loadProfilePic(constructor.getImageUrl());
-            }
+            loadProfilePic(engineer.getImageUrl());
         }
+
 
         showOrHideProgressBar(View.GONE); /*hide progress bar*/
         showOrHideEditButton(View.VISIBLE); /*show edit profile button after loading user profile*/
@@ -476,7 +414,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         showOrHideEditButton(View.GONE);
 
         FirebaseFirestore.getInstance()
-                .collection(mCollection)
+                .collection("engineers")
                 .document(SharedPreferenceManager.getEmail(this))
                 .update(Constants.DocumentFields.FIST_NAME, firstName,
                         Constants.DocumentFields.LAST_NAME, lastName,
@@ -545,9 +483,6 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btnStatus:
-                updateStatus();
-                break;
             case R.id.btnProfileEdit:
                 showProfileEditDialog();
                 break;
@@ -557,21 +492,6 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
             default:
                 break;
         }
-    }
-
-    /**
-     * update constructor status
-     */
-    private void updateStatus() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Task<Void> status = db.collection(Constants.CONSTRUCTOR_COLLECTION).document(SharedPreferenceManager.getEmail(UserProfileActivity.this))
-                .update("status", getResources().getStringArray(R.array.constructor_status)[mSelectedItemPosition]);
-        status.addOnSuccessListener(UserProfileActivity.this, aVoid -> {
-            Utils.showToast(UserProfileActivity.this, "Status updated");
-
-        }).addOnFailureListener(UserProfileActivity.this, e -> {
-            Utils.showToast(UserProfileActivity.this, "Error " + e.getLocalizedMessage());
-        });
     }
 
     public void eventChangeProfile(View view) {
@@ -636,7 +556,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
      */
     private void updateImageUrl(String url) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(mCollection).document(SharedPreferenceManager.getEmail(this))
+        db.collection(ENGINEER_COLLECTIONS).document(SharedPreferenceManager.getEmail(this))
                 .update(Constants.DocumentFields.USERS_IMAGE_URL, url)
                 .addOnSuccessListener(this, aVoid -> {
                     Utils.showToast(this, "Profile picture updated");

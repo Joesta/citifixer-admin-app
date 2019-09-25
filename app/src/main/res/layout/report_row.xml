@@ -13,18 +13,18 @@
         android:layout_margin="16dp">
 
         <TextView
-            android:id="@+id/fullName"
+            android:id="@+id/report"
             android:layout_width="130dp"
             android:layout_height="25dp"
             android:textColor="#FFF"
             android:textSize="17sp"
             android:fontFamily="serif"
-            android:text="Full Name"
+            android:text="Info"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/fullNameText"
+            android:id="@+id/reportText"
             android:layout_width="240dp"
             android:layout_height="25dp"
             android:textColor="#FFF"
@@ -32,7 +32,7 @@
             android:fontFamily="serif"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/fullName"
+            app:layout_constraintStart_toEndOf="@id/report"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

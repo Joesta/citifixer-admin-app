@@ -1,4 +1,4 @@
-package com.dso30bt.project2019.potapp.utils;
+package com.dso30bt.project2019.engineerdashboard.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -31,7 +31,6 @@ public class SharedPreferenceManager {
         editor.putInt(SharedPreferenceHelper.FLAG, flag);
         editor.apply();
     }
-
 
     public static int getFlag(Context ctx) {
         SharedPreferences sp
