@@ -14,17 +14,17 @@ import com.dso30bt.project2019.engineerdashboard.models.Engineer;
 import com.dso30bt.project2019.engineerdashboard.models.LoginModel;
 import com.dso30bt.project2019.engineerdashboard.models.Person;
 import com.dso30bt.project2019.engineerdashboard.models.Report;
-import com.dso30bt.project2019.engineerdashboard.models.Role;
 import com.dso30bt.project2019.engineerdashboard.models.User;
 import com.dso30bt.project2019.engineerdashboard.utils.Constants;
 import com.dso30bt.project2019.engineerdashboard.utils.NavUtil;
 import com.dso30bt.project2019.engineerdashboard.utils.SharedPreferenceManager;
 import com.dso30bt.project2019.engineerdashboard.utils.Utils;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.core.OnlineState;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.PageSize;
@@ -55,6 +55,7 @@ public class UserImpl implements IUserRepository {
 
     public UserImpl(Context context) {
         this.context = context;
+        Log.i(TAG, "UserImpl: Called by " + context.toString());
     }
 
     @Override
@@ -93,8 +94,10 @@ public class UserImpl implements IUserRepository {
                     .addOnCompleteListener(((Activity) context), task -> {
                         if (task.isComplete()) {
                             Log.i(TAG, "deleteUserOrConstructor: user deleted");
+                            Utils.showToast(context, "User deleted.");
                         } else {
                             Log.i(TAG, "deleteUserOrConstructor: failed to delete user");
+                            Utils.showToast(context, "Failed to delete user! Please try again.");
                         }
                     });
         }
@@ -241,14 +244,195 @@ public class UserImpl implements IUserRepository {
                         .addOnCompleteListener(((Activity) context), task -> {
                             if (!task.isComplete()) {
                                 Log.d(TAG, "assignReport: failed to update report!");
+                                Utils.showToast(context, "An error occurred while trying to assign report. Please try again.");
                                 return;
                             }
 
-                            Log.i(TAG, "assignReport: report updated successfully");
+                            updateReport(report);
                         });
             }
 
         }, documentId);
+    }
+
+    @Override
+    public void getReports(IFirebase.Reports reportsCallback) {
+        db.collection(Constants.REPORT_COLLECTION)
+                .addSnapshotListener(((Activity) context), ((querySnapshot, error) -> {
+                    if (error != null) {
+                        Utils.showToast(context, "An error occurred while fetching reports. Please try again.");
+                        return;
+                    }
+
+                    assert querySnapshot != null;
+                    if (querySnapshot.isEmpty()) {
+                        Utils.showToast(context, "No reports found!");
+                        Log.e(TAG, "getReports: Reports not found ");
+                        return;
+                    }
+
+                    final List<Report> reportList = new ArrayList<>();
+                    List<DocumentSnapshot> documents = querySnapshot.getDocuments();
+
+                    for (DocumentSnapshot snapshot : documents) {
+                        final Report report = snapshot.toObject(Report.class);
+                        reportList.add(report);
+                    }
+
+                    reportsCallback.onFetchedReports(reportList);
+                }));
+    }
+
+    @Override
+    public void updateReport(Report report) {
+        getReportDocumentReference(document -> {
+            db.collection(Constants.REPORT_COLLECTION)
+                    .document(document)
+                    .set(report)
+                    .addOnCompleteListener(((Activity) context), task -> {
+                        if (!task.isComplete()) {
+                            Utils.showToast(context, "Failed to contact server. Please try again.");
+                            Log.i(TAG, "updateReport: Failed contact server. Please try again");
+                            return;
+                        }
+
+                        Utils.showToast(context, "Report updated successfully.");
+                        Log.i(TAG, "updateReport: document updated.");
+                    });
+        }, report.getReportId());
+    }
+
+    @Override
+    public void getReportDocumentReference(IFirebase.ReportDocumentRef reportDocumentCallback, int reportId) {
+        db.collection(Constants.REPORT_COLLECTION)
+                .addSnapshotListener(((Activity) context), (querySnapshot, error) -> {
+                    if (error != null) {
+                        Utils.showToast(context, "An error occurred while contacting server. Please try again.");
+                        return;
+                    }
+
+                    if (querySnapshot.isEmpty()) {
+                        Utils.showToast(context, "No reports found!");
+                        return;
+                    }
+
+                    Task<QuerySnapshot> snapshotTask = querySnapshot.getQuery()
+                            .whereEqualTo("reportId", reportId).get();
+                    snapshotTask.addOnCompleteListener(((Activity) context), task -> {
+                        if (!task.isComplete()) {
+                            Log.i(TAG, "getReportDocumentReference: Failed to contact server.");
+                            Utils.showToast(context, "Failed to contact server.");
+                            return;
+                        }
+
+                        QuerySnapshot result = task.getResult();
+                        assert result != null;
+                        if (result.getDocuments().isEmpty()) {
+                            Log.i(TAG, "getReportDocumentReference: No reports record found");
+                            Utils.showToast(context, "No report records found.");
+                            return;
+                        }
+
+                        DocumentReference reference =
+                                result.getDocuments().get(0).getReference();
+                        Log.i(TAG, "getReportDocumentReference: document reference " + reference.getId());
+                        reportDocumentCallback.onFetchedDocumentId(reference.getId());
+
+                    });
+                });
+    }
+
+    @Override
+    public void getRoadUsers(IFirebase.RoadUsers usersCallback) {
+        db.collection(Constants.USER_COLLECTION)
+                .addSnapshotListener(((Activity) context), ((querySnapshot, error) -> {
+                    if (error != null) {
+                        Utils.showToast(context, "An error occurred while fetching users. Please try again..");
+                        return;
+                    }
+
+                    final List<User> userList = new ArrayList<>();
+
+                    List<DocumentSnapshot> documents = querySnapshot.getDocuments();
+                    for (DocumentSnapshot documentSnapshot : documents) {
+                        User user = documentSnapshot.toObject(User.class);
+                        userList.add(user);
+                    }
+                    usersCallback.onFetchedUsers(userList);
+                }));
+    }
+
+    @Override
+    public void getConstructors(IFirebase.Constructors constructorsCallback) {
+        db.collection(Constants.CONSTRUCTOR_COLLECTION)
+                .addSnapshotListener(((Activity) context), (querySnapshot, error) -> {
+                    if (error != null) {
+                        Utils.showToast(context, "An error occurred while fetching constructors. Please try again");
+                        return;
+                    }
+
+                    final List<Constructor> constructorList = new ArrayList<>();
+                    List<DocumentSnapshot> documents = querySnapshot.getDocuments();
+
+                    for (DocumentSnapshot snapshot : documents) {
+                        Constructor constructor = snapshot.toObject(Constructor.class);
+                        constructorList.add(constructor);
+                    }
+                    constructorsCallback.onFetchedConstructors(constructorList);
+                });
+    }
+
+    @Override
+    public void getAllUsers(IFirebase.Users usersCallback) {
+        getRoadUsers(userList -> {
+            getConstructors(constructorsList -> {
+                if (userList.isEmpty() && constructorsList.isEmpty()) {
+                    Utils.showToast(context, "Users not found!");
+                    return;
+                }
+
+                List<Person> people = new ArrayList<>();
+                people.addAll(userList);
+                people.addAll(constructorsList);
+
+                usersCallback.onFetchedUsers(people);
+            });
+        });
+    }
+
+    @Override
+    public void getEngineers(IFirebase.Engineers engineersCallback) {
+        db.collection(Constants.ENGINEER_COLLECTION)
+                .addSnapshotListener(((Activity) context), ((querySnapshot, error) -> {
+                    if (error != null) {
+                        Utils.showToast(context, "An error occurred while fetching engineers. Please try again.");
+                        return;
+                    }
+
+                    final List<Engineer> engineerList = new ArrayList<>();
+                    List<DocumentSnapshot> documents = querySnapshot.getDocuments();
+
+                    for (DocumentSnapshot snapshot : documents) {
+                        Engineer engineer = snapshot.toObject(Engineer.class);
+                        engineerList.add(engineer);
+                    }
+                    engineersCallback.onFetchedEngineers(engineerList);
+
+                }));
+    }
+
+    @Override
+    public void deleteAllReports() {
+        db.collection(Constants.REPORT_COLLECTION)
+                .document()
+                .delete()
+                .addOnCompleteListener(((Activity) context), task -> {
+                    if (task.isComplete()) {
+                        Log.i(TAG, "deleteAllReports: reports deleted");
+                    } else {
+                        Log.e(TAG, "deleteAllReports: failed to delete reports", task.getException());
+                    }
+                });
     }
 
     private void getEngineerFullNames(IFirebase.EngineerDetails callback, String engineerDocumentId) {
@@ -268,108 +452,6 @@ public class UserImpl implements IUserRepository {
                         }
                     } else {
                         Log.d(TAG, "getEngineerFullNames: failed to connect to server!");
-                    }
-                });
-    }
-
-    @Override
-    public void getReports(IFirebase.Reports reportsCallback) {
-        db.collection(Constants.REPORT_COLLECTION)
-                .get()
-                .addOnCompleteListener(((Activity) context), task -> {
-                    if (!task.isComplete()) {
-                        Log.e(TAG, "getReports: failed to get reports", task.getException());
-                        return;
-                    }
-
-                    QuerySnapshot querySnapshot = task.getResult();
-                    assert querySnapshot != null;
-                    if ((querySnapshot.isEmpty()) && querySnapshot.size() == 0) {
-                        Utils.showToast(context, "No reports found!");
-                        Log.e(TAG, "getReports: Reports not found ", task.getException());
-                        return;
-                    }
-
-                    final List<Report> reportList = new ArrayList<>();
-                    for (DocumentSnapshot snapshot : querySnapshot) {
-                        final Report report = snapshot.toObject(Report.class);
-                        reportList.add(report);
-                    }
-
-                    reportsCallback.onFetchedReports(reportList);
-                });
-    }
-
-    @Override
-    public void getUsers(IFirebase.Users usersCallback) {
-        db.collection(Constants.USER_COLLECTION)
-                .get()
-                .addOnCompleteListener(((Activity) context), task -> {
-                    if (task.isComplete()) {
-                        final List<User> userList = new ArrayList<>();
-
-                        QuerySnapshot result = task.getResult();
-                        for (DocumentSnapshot snapshot : result) {
-                            User user = snapshot.toObject(User.class);
-                            userList.add(user);
-                        }
-
-                        usersCallback.onFetchedUsers(userList);
-                    }
-                });
-    }
-
-    @Override
-    public void getConstructors(IFirebase.Constructors constructorsCallback) {
-        db.collection(Constants.CONSTRUCTOR_COLLECTION)
-                .get()
-                .addOnCompleteListener(((Activity) context), task -> {
-                    if (task.isComplete()) {
-                        final List<Constructor> constructorList = new ArrayList<>();
-
-                        QuerySnapshot result = task.getResult();
-                        for (DocumentSnapshot snapshot : result) {
-                            Constructor constructor = snapshot.toObject(Constructor.class);
-                            constructorList.add(constructor);
-                        }
-
-                        constructorsCallback.onFetchedConstructors(constructorList);
-                    }
-                });
-    }
-
-    @Override
-    public void getEngineers(IFirebase.Engineers engineersCallback) {
-        Log.i(TAG, "getEngineers: in method");
-        db.collection(Constants.ENGINEER_COLLECTION)
-                .get()
-                .addOnCompleteListener(((Activity) context), task -> {
-                    if (task.isComplete()) {
-                        final List<Engineer> engineerList = new ArrayList<>();
-
-                        QuerySnapshot result = task.getResult();
-                        for (DocumentSnapshot snapshot : result) {
-                            Engineer engineer = snapshot.toObject(Engineer.class);
-                            engineerList.add(engineer);
-                            String firstName = snapshot.get("firstName").toString();
-                            Log.i(TAG, "getEngineers: " + firstName);
-                        }
-
-                        engineersCallback.onFetchedEngineers(engineerList);
-                    }
-                });
-    }
-
-    @Override
-    public void deleteAllReports() {
-        db.collection(Constants.REPORT_COLLECTION)
-                .document()
-                .delete()
-                .addOnCompleteListener(((Activity) context), task -> {
-                    if (task.isComplete()) {
-                        Log.i(TAG, "deleteAllReports: reports deleted");
-                    } else {
-                        Log.e(TAG, "deleteAllReports: failed to delete reports", task.getException());
                     }
                 });
     }

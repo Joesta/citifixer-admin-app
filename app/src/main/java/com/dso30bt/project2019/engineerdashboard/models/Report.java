@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -14,6 +15,7 @@ import lombok.ToString;
 @Data
 @ToString
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper=false)
 public class Report implements Serializable {
     private int reportId;
     private int userId;

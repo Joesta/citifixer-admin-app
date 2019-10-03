@@ -12,6 +12,7 @@ import lombok.ToString;
 
 @Data
 @ToString
+@EqualsAndHashCode(callSuper=false)
 public class User extends Person {
     private String imageUrl;
     private List<Report> reportList;

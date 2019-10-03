@@ -1,5 +1,6 @@
 package com.dso30bt.project2019.engineerdashboard.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.dso30bt.project2019.engineerdashboard.R;
@@ -11,6 +12,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -66,11 +69,16 @@ public class ReportsActivity extends FragmentActivity implements OnMapReadyCallb
                             final double lng = coordinates.getLongitude();
                             final String reportBy = report.getReportedBy();
 
-                            Marker marker = mMap.addMarker(new MarkerOptions()
-                                    .position(new LatLng(lat, lng))
-                                    .title(reportBy)
-                                    .snippet("Reported on: " + report.getReportDate()));
-                            markers.add(marker);
+
+                            BitmapDescriptor bitmapDescriptor = null;
+
+                            if (report.getConstructor() == null) {
+                                bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE);
+                            } else {
+                                bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+                            }
+
+                            addMarker(markers, bitmapDescriptor, report, lat, lng, reportBy);
 
                         }
 
@@ -85,5 +93,24 @@ public class ReportsActivity extends FragmentActivity implements OnMapReadyCallb
                         mMap.animateCamera(cu);
                     }
                 });
+    }
+
+    private void addMarker(List<Marker> markers, BitmapDescriptor bitmapDescriptor, Report report, double lat, double lng, String reportBy) {
+        Marker marker = mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(lat, lng))
+                .title(reportBy)
+                .snippet("Reported on: " + report.getReportDate())
+                .icon(bitmapDescriptor));
+        markers.add(marker);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        gotoManageReports();
+    }
+
+    private void gotoManageReports() {
+        startActivity(new Intent(this, ManageReportsActivity.class));
     }
 }

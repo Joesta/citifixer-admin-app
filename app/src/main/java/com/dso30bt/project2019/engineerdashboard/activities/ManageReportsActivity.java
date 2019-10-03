@@ -2,6 +2,7 @@ package com.dso30bt.project2019.engineerdashboard.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -29,11 +30,12 @@ public class ManageReportsActivity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manager_reports);
 
-        setListenerFor(R.id.btnListReports, R.id.btnRemoveReports, R.id.btnAssignReport, R.id.btnGenerateReports);
+        setListenerFor(R.id.btnListReports, R.id.btnReportMap, R.id.btnRemoveReports, R.id.btnAssignReport, R.id.btnGenerateReports);
     }
 
-    private void setListenerFor(int btnListReports, int btnRemoveReports, int btnAssignReport, int btnGenerateReports) {
+    private void setListenerFor(int btnListReports, int btnReportMap, int btnRemoveReports, int btnAssignReport, int btnGenerateReports) {
         findViewById(btnListReports).setOnClickListener(this);
+        findViewById(btnReportMap).setOnClickListener(this);
         findViewById(btnRemoveReports).setOnClickListener(this);
         findViewById(btnAssignReport).setOnClickListener(this);
         findViewById(btnGenerateReports).setOnClickListener(this);
@@ -56,6 +58,9 @@ public class ManageReportsActivity extends AppCompatActivity implements View.OnC
             case R.id.btnListReports:
                 NavUtil.moveToNextActivity(this, MainListActivity.class);
                 break;
+            case R.id.btnReportMap:
+                requestMapsPermission();
+                break;
             case R.id.btnRemoveReports:
                 showDialog();
                 break;
@@ -68,6 +73,19 @@ public class ManageReportsActivity extends AppCompatActivity implements View.OnC
             default:
                 break;
         }
+    }
+
+    @SuppressLint("CheckResult")
+    private void requestMapsPermission() {
+        rxPermissions.request(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_NETWORK_STATE)
+                .subscribe(granted -> {
+                    if (granted) {
+                        startActivity(new Intent(this, ReportsActivity.class));
+                    }
+                });
     }
 
     private void assignReports() {

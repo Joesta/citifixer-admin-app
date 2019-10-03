@@ -2,6 +2,7 @@ package com.dso30bt.project2019.engineerdashboard.interfaces;
 
 import com.dso30bt.project2019.engineerdashboard.models.Constructor;
 import com.dso30bt.project2019.engineerdashboard.models.Engineer;
+import com.dso30bt.project2019.engineerdashboard.models.Person;
 import com.dso30bt.project2019.engineerdashboard.models.Report;
 import com.dso30bt.project2019.engineerdashboard.models.User;
 
@@ -19,8 +20,16 @@ public interface IFirebase {
         void onFetchedReports(List<Report> reportList);
     }
 
-    interface Users {
+    interface ReportDocumentRef {
+        void onFetchedDocumentId(String documentId);
+    }
+
+    interface RoadUsers {
         void onFetchedUsers(List<User> userList);
+    }
+
+    interface Users {
+        void onFetchedUsers(List<Person> people);
     }
 
     interface Constructors {

@@ -10,4 +10,5 @@
     <dimen name="margin_vertical_tv_dialog">15dp</dimen>
     <dimen name="width_dialog_tv">105dp</dimen>
     <dimen name="margin_start_et_dialog">110dp</dimen>
+    <dimen name="btnMarginTop">8dp</dimen>
 </resources>

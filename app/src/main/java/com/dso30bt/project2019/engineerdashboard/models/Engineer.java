@@ -16,6 +16,7 @@ import lombok.ToString;
 @Data
 @ToString
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper=false)
 public class Engineer extends Person implements Serializable {
     private String imageUrl;
     private List<User> userList;

@@ -38,5 +38,7 @@
 
     <string name="google_maps_key">AIzaSyDQelQoq0kdZwb6JVdqGTyOPcdjw-02PhE</string>
     <string name="title_activity_reports">Reports</string>
+    <string name="search_hint">Filter by First or Last name</string>
+    <string name="action_search">Search users</string>
 
 </resources>

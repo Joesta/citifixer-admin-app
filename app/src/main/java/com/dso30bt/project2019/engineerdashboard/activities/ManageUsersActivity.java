@@ -1,7 +1,6 @@
 package com.dso30bt.project2019.engineerdashboard.activities;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -12,6 +11,7 @@ import com.dso30bt.project2019.engineerdashboard.models.Engineer;
 import com.dso30bt.project2019.engineerdashboard.models.Role;
 import com.dso30bt.project2019.engineerdashboard.repository.UserImpl;
 import com.dso30bt.project2019.engineerdashboard.utils.NavUtil;
+import com.dso30bt.project2019.engineerdashboard.utils.validators.NamesEntryValidator;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -40,14 +40,15 @@ public class ManageUsersActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manager_users);
 
-        setListenerFor(R.id.btnListUsers, R.id.btnListConstructors, R.id.btnListEngineer, R.id.btnAddEngineer);
+        setListenerFor(R.id.btnListUsers, R.id.btnListConstructors, R.id.btnRemoveUsers, R.id.btnListEngineer, R.id.btnAddEngineer);
     }
 
-    private void setListenerFor(int btnListUsers, int btnListConstructors, int btnListEngineer, int btnAddEngineer) {
+    private void setListenerFor(int btnListUsers, int btnListConstructors, int btnRemoveUsers, int btnListEngineer, int btnAddEngineer) {
         findViewById(btnListUsers).setOnClickListener(this);
         findViewById(btnListConstructors).setOnClickListener(this);
         findViewById(btnListEngineer).setOnClickListener(this);
         findViewById(btnAddEngineer).setOnClickListener(this);
+        findViewById(btnRemoveUsers).setOnClickListener(this);
     }
 
     @Override
@@ -70,6 +71,9 @@ public class ManageUsersActivity extends AppCompatActivity implements View.OnCli
             case R.id.btnListConstructors:
                 NavUtil.moveToNextActivity(this, MainListActivity.class, "700");
                 break;
+            case R.id.btnRemoveUsers:
+                NavUtil.moveToNextActivity(this, MainListActivity.class, "777");
+                break;
             case R.id.btnListEngineer:
                 NavUtil.moveToNextActivity(this, MainListActivity.class, "755");
                 break;
@@ -83,7 +87,7 @@ public class ManageUsersActivity extends AppCompatActivity implements View.OnCli
 
     private void showAddDialog() {
         View editView = LayoutInflater.from(this).inflate(R.layout.layout_add_engineer, null);
-        getInputReference(editView);
+        getInputReferenceFromView(editView);
         buildDialog()
                 .setCancelable(false)
                 .setTitle("Add Engineer")
@@ -94,7 +98,7 @@ public class ManageUsersActivity extends AppCompatActivity implements View.OnCli
                 .create().show();
     }
 
-    private void getInputReference(View editView) {
+    private void getInputReferenceFromView(View editView) {
         firstNameText = editView.findViewById(R.id.etFirstName);
         lastNameText = editView.findViewById(R.id.etLastName);
         idNumberText = editView.findViewById(R.id.etIdNumber);
@@ -127,8 +131,15 @@ public class ManageUsersActivity extends AppCompatActivity implements View.OnCli
          String gender = spinnerGender.getSelectedItem().toString();
 
         // @Todo - validate values
+        //validateEntries();
         createEngineer(firstName, lastName, idNumber, gender, cellNumber, emailAddress, password, new Role(777, "Engineer"));
     }
+
+    private void validateEntries() {
+        NamesEntryValidator validator = new NamesEntryValidator(firstNameText);
+        firstNameText.addTextChangedListener(validator);
+    }
+
 
     private void createEngineer(String firstName, String lastName, String idNumber, String gender, String cellNumber, String emailAddress, String password, Role role) {
         Engineer engineer = new Engineer();

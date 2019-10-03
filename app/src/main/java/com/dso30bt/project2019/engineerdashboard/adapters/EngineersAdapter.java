@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dso30bt.project2019.engineerdashboard.R;
@@ -39,6 +40,7 @@ public class EngineersAdapter extends RecyclerView.Adapter<EngineersAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final String fullName = engineerList.get(position).getFirstName() + " " + engineerList.get(position).getLastName();
         holder.tvFullName.setText(fullName);
+        holder.detailsImageView.setImageDrawable(null);
     }
 
     @Override
@@ -49,6 +51,8 @@ public class EngineersAdapter extends RecyclerView.Adapter<EngineersAdapter.View
     class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvFullName;
+        ImageView detailsImageView;
+
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             view = itemView;
@@ -57,6 +61,7 @@ public class EngineersAdapter extends RecyclerView.Adapter<EngineersAdapter.View
 
         private void initUI() {
             tvFullName = view.findViewById(R.id.fullNameText);
+            detailsImageView = view.findViewById(R.id.detailsImageView);
         }
     }
 }

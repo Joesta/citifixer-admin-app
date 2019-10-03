@@ -51,7 +51,14 @@
         <activity android:name=".activities.UserProfileActivity" />
         <activity android:name=".activities.AboutActivity" />
         <activity android:name=".activities.ManageUsersActivity" />
-        <activity android:name=".activities.MainListActivity" />
+        <activity android:name=".activities.MainListActivity">
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+        </activity>
         <activity android:name=".activities.ManageReportsActivity" />
         <activity android:name=".activities.ConstructorDetailsActivity" />
     </application>

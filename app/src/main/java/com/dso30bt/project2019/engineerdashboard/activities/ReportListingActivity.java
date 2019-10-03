@@ -3,10 +3,7 @@ package com.dso30bt.project2019.engineerdashboard.activities;
 import android.os.Bundle;
 
 import com.dso30bt.project2019.engineerdashboard.R;
-import com.dso30bt.project2019.engineerdashboard.adapters.ConstructorAdapter;
-import com.dso30bt.project2019.engineerdashboard.adapters.EngineersAdapter;
 import com.dso30bt.project2019.engineerdashboard.adapters.ReportAdapter;
-import com.dso30bt.project2019.engineerdashboard.adapters.UsersAdapter;
 import com.dso30bt.project2019.engineerdashboard.repository.UserImpl;
 import com.dso30bt.project2019.engineerdashboard.utils.NavUtil;
 

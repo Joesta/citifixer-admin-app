@@ -99,8 +99,7 @@ public class MainActivity extends AppCompatActivity
         if (itemId == R.id.nav_profile) {
             gotoUserProfileActivity();
         } else if (itemId == R.id.nav_share) {
-            //shareApp();
-            startActivity(new Intent(this, ReportsActivity.class));
+            shareApp();
 
         } else if (itemId == R.id.nav_about) {
             gotoAboutAppActivity();

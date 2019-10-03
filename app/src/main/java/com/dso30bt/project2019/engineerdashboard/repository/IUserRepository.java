@@ -25,7 +25,13 @@ public interface IUserRepository {
 
     void getReports(IFirebase.Reports reportsCallback);
 
-    void getUsers(IFirebase.Users usersCallback);
+    void updateReport(Report report);
+
+    void getReportDocumentReference(IFirebase.ReportDocumentRef reportDocumentCallback, int reportId);
+
+    void getRoadUsers(IFirebase.RoadUsers usersCallback);
+
+    void getAllUsers(IFirebase.Users usersCallback);
 
     void getConstructors(IFirebase.Constructors constructorsCallback);
 

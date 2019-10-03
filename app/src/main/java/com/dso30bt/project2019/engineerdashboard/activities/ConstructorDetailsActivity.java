@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.dso30bt.project2019.engineerdashboard.R;
 import com.dso30bt.project2019.engineerdashboard.models.Constructor;
-import com.dso30bt.project2019.engineerdashboard.models.Pothole;
 import com.dso30bt.project2019.engineerdashboard.models.Report;
 import com.dso30bt.project2019.engineerdashboard.repository.UserImpl;
 import com.dso30bt.project2019.engineerdashboard.utils.Constants;
@@ -35,7 +34,7 @@ public class ConstructorDetailsActivity extends AppCompatActivity implements Ada
     private static final String TAG = "ConstructorDetailsActiv";
     private String mEmail = null;
 
-    private List<Report> reportListList = null;
+    private List<Report> reportList = null;
 
     /*widgets*/
     private TextView tvConstructorFirstName;
@@ -57,6 +56,7 @@ public class ConstructorDetailsActivity extends AppCompatActivity implements Ada
         setContentView(R.layout.activity_constructor_details);
 
         mEmail = getIntent().getStringExtra(Constants.EXTRA_EMAIL);
+        userImpl = new UserImpl(this);
 
         intiUI();
         getConstructorDetails();
@@ -74,48 +74,64 @@ public class ConstructorDetailsActivity extends AppCompatActivity implements Ada
     }
 
     private void getConstructorDetails() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(Constants.CONSTRUCTOR_COLLECTION).document(mEmail)
-                .get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
+        FirebaseFirestore.getInstance()
+                .collection(Constants.CONSTRUCTOR_COLLECTION)
+                .document(mEmail)
+                .addSnapshotListener((snapshot, error) -> {
 
-                        Log.d(TAG, "getConstructorDetails: Document id is " + documentSnapshot.getReference().getId());
-                        mConstructor = documentSnapshot.toObject(Constructor.class);
+                    if (error != null) {
+                        Utils.showToast(this, error.getLocalizedMessage());
+                        return;
+                    }
+
+                    if (snapshot.exists()) {
+                        Log.d(TAG, "getConstructorDetails: Document id is " + snapshot.getReference().getId());
+                        mConstructor = snapshot.toObject(Constructor.class);
                         tvConstructorFirstName.setText(mConstructor.getFirstName());
                         tvConstructorLastName.setText(mConstructor.getLastName());
                         tvConstructorCell.setText(mConstructor.getCellNumber());
                         tvConstructorEmail.setText(mConstructor.getEmailAddress());
                         tvConstructorStatus.setText(mConstructor.getStatus().getDescription());
-
                     } else {
-                        Utils.showToast(ConstructorDetailsActivity.this, "Error reading user data");
+                        Utils.showToast(getApplicationContext(), "User profile no longer exist!");
                     }
+                });
 
-                })
-                .addOnFailureListener(e -> Utils.showToast(this, e.getLocalizedMessage()));
+
     }
 
     private void getAllReports() {
-        reportListList = new ArrayList<>();
+        reportList = new ArrayList<>();
         userImpl = new UserImpl(this);
 
         userImpl.getReports(this::onFetchedReports);
     }
 
     private void onFetchedReports(List<Report> reportList) {
-        this.reportListList = reportList;
+        this.reportList = reportList;
 
-        for (Report report : reportList) {
-            list.add(report.getReportDate().toString());
+        StringBuffer sb = new StringBuffer();
+
+        for (int i = 0; i < this.reportList.size(); i++) {
+            Report currentReport = this.reportList.get(i);
+            if (currentReport.getConstructor() == null) {
+                sb.append(currentReport.getReportDate().toString());
+                list.add(sb.toString());
+                sb.delete(0, sb.length()); // clear
+            }
         }
 
         loadPotholeList();
     }
 
     private void loadPotholeList() {
+        if (list.size() == 0) {
+            return;
+        }
+
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
         lvPotholes.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
         lvPotholes.setOnItemClickListener(this);
     }
 
@@ -127,11 +143,47 @@ public class ConstructorDetailsActivity extends AppCompatActivity implements Ada
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        Utils.showToast(this, mConstructor.getFirstName() + " " + mConstructor.getLastName());
+        // check if the selected report wa already assigned
+        Report selectedReport = reportList.get(position);
+        boolean reportAlreadyAssigned = isReportAlreadyAssigned(selectedReport);
 
-        userImpl = new UserImpl(this);
-        userImpl.assignReport(reportListList.get(position), mConstructor);
 
+        if (reportAlreadyAssigned) {
+            Utils.showToast(this, "Report is already assigned.");
+        } else {
+            boolean constructorAvailable = isConstructorAvailable();
+            if (constructorAvailable) {
+                userImpl.assignReport(selectedReport, mConstructor);
+            } else {
+                Utils.showToast(getApplicationContext(), "Cannot assign report to " + getAssignedConstructorNames(mConstructor) +
+                        ". Please try again when their status changed to available.");
+            }
+        }
+    }
+
+    private String getAssignedConstructorNames(Constructor constructor) {
+        String firstName = constructor.getFirstName();
+        String lastName = constructor.getLastName();
+
+        return firstName + " " + lastName;
+    }
+
+    private boolean isReportAlreadyAssigned(Report selectedReport) {
+        int terminator = 0;
+        List<Report> constructorReportList = mConstructor.getReportList();
+        // traverse through constructor list to check is the selected report was already assigned to this constructor
+        for (Report report : constructorReportList) {
+            if (selectedReport.getReportDate().equals(report.getReportDate())) {
+                terminator++;
+            }
+        }
+
+        // check reason for loop termination
+        if (terminator > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private boolean isPotholeAlreadyAssigned(final int position) {
@@ -140,8 +192,6 @@ public class ConstructorDetailsActivity extends AppCompatActivity implements Ada
     }
 
     private boolean isConstructorAvailable() {
-        //return !mConstructor.getStatus().equalsIgnoreCase(ConstructorStatusEnum.AVAILABLE.value);
-
-        return false;
+        return mConstructor.getStatus().getDescription().equalsIgnoreCase("available");
     }
 }

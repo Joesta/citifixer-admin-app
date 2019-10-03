@@ -12,6 +12,7 @@ import lombok.ToString;
 
 @Data
 @ToString
+@EqualsAndHashCode(callSuper=false)
 public class Constructor extends Person {
     private String imageUrl;
     private Status status;
@@ -29,5 +30,18 @@ public class Constructor extends Person {
         this.imageUrl = imageUrl;
         this.status = status;
         this.reportList = reportList;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Constructor) {
+            if (this.getIdNumber().equals(((Constructor) obj).getIdNumber())) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        return false;
     }
 }

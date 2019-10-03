@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dso30bt.project2019.engineerdashboard.R;
@@ -17,13 +18,13 @@ import androidx.recyclerview.widget.RecyclerView;
 /**
  * Created by Joesta on 2019/09/16.
  */
-public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> {
+public class RoadUsersAdapter extends RecyclerView.Adapter<RoadUsersAdapter.ViewHolder> {
 
     private Context context;
     private View view;
     private List<User> userList;
 
-    public UsersAdapter(Context context, List<User> userList) {
+    public RoadUsersAdapter(Context context, List<User> userList) {
         this.context = context;
         this.userList = userList;
     }
@@ -39,6 +40,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final String fullName = userList.get(position).getFirstName() + " " + userList.get(position).getLastName();
         holder.tvFullName.setText(fullName);
+        holder.detailsImageView.setImageDrawable(null);
     }
 
     @Override
@@ -49,6 +51,8 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
     class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvFullName;
+        ImageView detailsImageView;
+
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             view = itemView;
@@ -57,6 +61,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
 
         private void initUI() {
             tvFullName = view.findViewById(R.id.fullNameText);
+            detailsImageView = view.findViewById(R.id.detailsImageView);
         }
     }
 }
