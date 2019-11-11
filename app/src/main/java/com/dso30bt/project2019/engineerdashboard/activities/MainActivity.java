@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.dso30bt.project2019.engineerdashboard.R;
 import com.dso30bt.project2019.engineerdashboard.models.Engineer;
+import com.dso30bt.project2019.engineerdashboard.utils.Constants;
 import com.dso30bt.project2019.engineerdashboard.utils.NavUtil;
 import com.dso30bt.project2019.engineerdashboard.utils.SharedPreferenceManager;
 import com.google.android.material.navigation.NavigationView;
@@ -41,12 +42,12 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         initUI();
-        loadEngineerFromDB();
+        getEngineerDetails();
 
     }
 
-    private void loadEngineerFromDB() {
-        FirebaseFirestore.getInstance().collection("engineers")
+    private void getEngineerDetails() {
+        FirebaseFirestore.getInstance().collection(Constants.ENGINEER_COLLECTION)
                 .document(SharedPreferenceManager.getEmail(this))
                 .get()
                 .addOnCompleteListener(this, task -> {

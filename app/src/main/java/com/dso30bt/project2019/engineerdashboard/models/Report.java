@@ -34,7 +34,8 @@ public class Report implements Serializable {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Report) {
-            if (this.reportDate.equals(((Report) obj).getReportDate())) {
+            if (this.reportId == ((Report) obj).getReportId()
+                    && this.reportDate.equals(((Report) obj).getReportDate())) {
                 return true;
             } else {
                 return false;

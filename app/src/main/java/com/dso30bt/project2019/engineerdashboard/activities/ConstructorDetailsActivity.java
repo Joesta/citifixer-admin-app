@@ -34,7 +34,7 @@ public class ConstructorDetailsActivity extends AppCompatActivity implements Ada
     private static final String TAG = "ConstructorDetailsActiv";
     private String mEmail = null;
 
-    private List<Report> reportList = null;
+    private List<Report> mReportList = null;
 
     /*widgets*/
     private TextView tvConstructorFirstName;
@@ -75,7 +75,7 @@ public class ConstructorDetailsActivity extends AppCompatActivity implements Ada
 
     private void getConstructorDetails() {
         FirebaseFirestore.getInstance()
-                .collection(Constants.CONSTRUCTOR_COLLECTION)
+                .collection(Constants.USER_COLLECTION)
                 .document(mEmail)
                 .addSnapshotListener((snapshot, error) -> {
 
@@ -101,23 +101,31 @@ public class ConstructorDetailsActivity extends AppCompatActivity implements Ada
     }
 
     private void getAllReports() {
-        reportList = new ArrayList<>();
+        // makes sure the list is updated with new reports
+        mReportList = new ArrayList<>();
         userImpl = new UserImpl(this);
-
-        userImpl.getReports(this::onFetchedReports);
+        userImpl.getReports(reportList -> {
+            mReportList = reportList;
+            addReportsToList();
+        });
     }
 
-    private void onFetchedReports(List<Report> reportList) {
-        this.reportList = reportList;
+    private void addReportsToList() {
+        if (mReportList.isEmpty()) {
+            Utils.showToast(getApplicationContext(), "No reports found!");
+            list = new ArrayList<>();
+            loadPotholeList();
+            return;
+        }
+
 
         StringBuffer sb = new StringBuffer();
 
-        for (int i = 0; i < this.reportList.size(); i++) {
-            Report currentReport = this.reportList.get(i);
-            if (currentReport.getConstructor() == null) {
+        for (Report currentReport : mReportList) {
+            if (currentReport.getConstructor() == null || currentReport.getAssignedBy().equalsIgnoreCase("Not-assigned")) {
                 sb.append(currentReport.getReportDate().toString());
                 list.add(sb.toString());
-                sb.delete(0, sb.length()); // clear
+                sb.delete(0, sb.length());
             }
         }
 
@@ -125,13 +133,9 @@ public class ConstructorDetailsActivity extends AppCompatActivity implements Ada
     }
 
     private void loadPotholeList() {
-        if (list.size() == 0) {
-            return;
-        }
 
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
         lvPotholes.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
         lvPotholes.setOnItemClickListener(this);
     }
 
@@ -141,22 +145,26 @@ public class ConstructorDetailsActivity extends AppCompatActivity implements Ada
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 
         // check if the selected report wa already assigned
-        Report selectedReport = reportList.get(position);
+        Report selectedReport = mReportList.get(position);
         boolean reportAlreadyAssigned = isReportAlreadyAssigned(selectedReport);
-
 
         if (reportAlreadyAssigned) {
             Utils.showToast(this, "Report is already assigned.");
+            Log.i(TAG, "onItemClick: " + selectedReport.getConstructor());
         } else {
             boolean constructorAvailable = isConstructorAvailable();
             if (constructorAvailable) {
+                // remove report from list adapter
+                adapter.remove(selectedReport.getReportDate().toString());
+                adapter.notifyDataSetChanged();
+                // assign a report
                 userImpl.assignReport(selectedReport, mConstructor);
+
             } else {
-                Utils.showToast(getApplicationContext(), "Cannot assign report to " + getAssignedConstructorNames(mConstructor) +
-                        ". Please try again when their status changed to available.");
+                Utils.showToast(getApplicationContext(), "Cannot assign report to " + getAssignedConstructorNames(mConstructor) + ". Please try again when their status changed to available.");
             }
         }
     }
@@ -170,25 +178,18 @@ public class ConstructorDetailsActivity extends AppCompatActivity implements Ada
 
     private boolean isReportAlreadyAssigned(Report selectedReport) {
         int terminator = 0;
-        List<Report> constructorReportList = mConstructor.getReportList();
-        // traverse through constructor list to check is the selected report was already assigned to this constructor
-        for (Report report : constructorReportList) {
-            if (selectedReport.getReportDate().equals(report.getReportDate())) {
+        List<Report> reports = mConstructor.getReportList();
+        if (reports.isEmpty()) {
+            return false;
+        }
+
+        for (Report report : reports) {
+            if (report.equals(selectedReport)) {
                 terminator++;
             }
         }
 
-        // check reason for loop termination
-        if (terminator > 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    private boolean isPotholeAlreadyAssigned(final int position) {
-        //return potholeList.get(position).getAssignedBy() != null;
-        return false;
+        return terminator > 0;
     }
 
     private boolean isConstructorAvailable() {

@@ -128,7 +128,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         showOrHideProgressBar(View.VISIBLE);
 
         FirebaseFirestore.getInstance()
-                .collection("engineers")
+                .collection(Constants.ENGINEER_COLLECTION)
                 .document(SharedPreferenceManager.getEmail(this))
                 /*listen ro changes in the document in real time*/
                 .addSnapshotListener(UserProfileActivity.this, (snapshot, error) -> {
@@ -414,7 +414,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         showOrHideEditButton(View.GONE);
 
         FirebaseFirestore.getInstance()
-                .collection("engineers")
+                .collection(Constants.ENGINEER_COLLECTION)
                 .document(SharedPreferenceManager.getEmail(this))
                 .update(Constants.DocumentFields.FIST_NAME, firstName,
                         Constants.DocumentFields.LAST_NAME, lastName,

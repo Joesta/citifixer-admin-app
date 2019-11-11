@@ -2,6 +2,7 @@ package com.dso30bt.project2019.engineerdashboard.repository;
 
 import com.dso30bt.project2019.engineerdashboard.interfaces.IFirebase;
 import com.dso30bt.project2019.engineerdashboard.models.Constructor;
+import com.dso30bt.project2019.engineerdashboard.models.Engineer;
 import com.dso30bt.project2019.engineerdashboard.models.LoginModel;
 import com.dso30bt.project2019.engineerdashboard.models.Person;
 import com.dso30bt.project2019.engineerdashboard.models.Report;
@@ -17,7 +18,7 @@ public interface IUserRepository {
 
     void deleteUserOrConstructor(Person person);
 
-    void addEngineer(Person person);
+    void registerEngineer(Engineer engineer);
 
     void generateReport(List<Report> reportList);
 
@@ -27,7 +28,7 @@ public interface IUserRepository {
 
     void updateReport(Report report);
 
-    void getReportDocumentReference(IFirebase.ReportDocumentRef reportDocumentCallback, int reportId);
+    void getDocumentReferenceId(IFirebase.ReportDocumentRef reportDocumentCallback, int reportId);
 
     void getRoadUsers(IFirebase.RoadUsers usersCallback);
 

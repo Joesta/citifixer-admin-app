@@ -121,12 +121,12 @@ public class ManageUsersActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void getInputEntries() {
-        String firstName = getStringFromView(firstNameText);
-        String lastName = getStringFromView(lastNameText);
-        String idNumber = getStringFromView(idNumberText);
-        String cellNumber = getStringFromView(cellNumberText);
-        String emailAddress = getStringFromView(emailText);
-        String password = getStringFromView(passwordText);
+        String firstName = getTextFromView(firstNameText);
+        String lastName = getTextFromView(lastNameText);
+        String idNumber = getTextFromView(idNumberText);
+        String cellNumber = getTextFromView(cellNumberText);
+        String emailAddress = getTextFromView(emailText);
+        String password = getTextFromView(passwordText);
 
          String gender = spinnerGender.getSelectedItem().toString();
 
@@ -153,16 +153,15 @@ public class ManageUsersActivity extends AppCompatActivity implements View.OnCli
         engineer.setRole(role);
         engineer.setImageUrl("");
 
-
         saveEngineer(engineer);
     }
 
     private void saveEngineer(Engineer engineer) {
         UserImpl userImpl = new UserImpl(this);
-        userImpl.addEngineer(engineer);
+        userImpl.registerEngineer(engineer);
     }
 
-    private String getStringFromView(EditText view) {
+    private String getTextFromView(EditText view) {
         return view.getText().toString();
     }
 

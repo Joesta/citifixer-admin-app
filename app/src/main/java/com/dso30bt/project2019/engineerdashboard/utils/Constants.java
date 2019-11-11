@@ -12,14 +12,14 @@ public class Constants {
 
 
     // collections
-    public static final String USER_COLLECTION = "users";
+    public static final String USER_COLLECTION = "USER";
     public static final String CONSTRUCTOR_COLLECTION = "constructors";
-    public static final String REPORT_COLLECTION = "reports";
-    public static final String ENGINEER_COLLECTION = "engineers";
+    public static final String REPORT_COLLECTION = "REPORT";
+    public static final String ENGINEER_COLLECTION = "ENGINEER";
     public static final String POTHOLE_COLLECTION = "potholes";
 
 
-    public static final String ROLE_COLLECTION = "role";
+    public static final String ROLE_COLLECTION = "ROLE";
 
     // id collections
     public static final String UUID_COLLECTION = "uuid";

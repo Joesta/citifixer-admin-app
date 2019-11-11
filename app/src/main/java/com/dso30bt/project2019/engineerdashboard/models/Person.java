@@ -43,7 +43,8 @@ public class Person implements Serializable {
     public boolean equals(Object obj) {
         if (obj instanceof Person) {
             if (this.idNumber.equals(((Person) obj).getIdNumber())
-                    || this.emailAddress.equals(((Person) obj).getEmailAddress())) {
+                    || this.emailAddress.equals(((Person) obj).getEmailAddress())
+                    || this.cellNumber.equals(((Person) obj).getCellNumber())) {
                 return true;
             } else {
                 return false;
