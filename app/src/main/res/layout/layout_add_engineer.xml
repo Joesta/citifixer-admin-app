@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!--card first name-->
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_firstName"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimenDialogCard"
+                android:layout_margin="16dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardBackgroundColor="#FFF"
+                app:cardElevation="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="@dimen/width_dialog_tv"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="@dimen/margin_vertical_tv_dialog"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="serif"
+                    android:text="First Name"
+                    android:textColor="#555"
+                    android:textSize="16dp" />
+
+                <EditText
+                    android:id="@+id/etFirstName"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/margin_start_et_dialog"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="serif"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPersonName"
+                    android:text=""
+                    android:textColor="#555"
+                    android:textSize="16dp" />
+
+
+            </androidx.cardview.widget.CardView>
+
+            <!--card last name-->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_lastName"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimenDialogCard"
+                android:layout_margin="16dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardBackgroundColor="#FFF"
+                app:cardElevation="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/card_firstName">
+
+                <TextView
+                    android:layout_width="@dimen/width_dialog_tv"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="@dimen/margin_vertical_tv_dialog"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="serif"
+                    android:text="Last Name"
+                    android:textColor="#555"
+                    android:textSize="16dp" />
+
+                <EditText
+                    android:id="@+id/etLastName"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/margin_start_et_dialog"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="serif"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPersonName"
+                    android:text=""
+                    android:textColor="#555"
+                    android:textSize="16dp" />
+
+            </androidx.cardview.widget.CardView>
+
+
+            <!--card id number-->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_idNumber"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimenDialogCard"
+                android:layout_margin="16dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardBackgroundColor="#FFF"
+                app:cardElevation="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/card_lastName">
+
+                <TextView
+                    android:layout_width="@dimen/width_dialog_tv"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="@dimen/margin_vertical_tv_dialog"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="serif"
+                    android:text="ID No"
+                    android:textColor="#555"
+                    android:textSize="16dp" />
+
+                <EditText
+                    android:id="@+id/etIdNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/margin_start_et_dialog"
+                    android:layout_marginTop="5dp"
+                    android:ellipsize="end"
+                    android:fontFamily="serif"
+                    android:inputType="number"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="#555"
+                    android:textSize="16dp" />
+            </androidx.cardview.widget.CardView>
+
+            <!--card gender-->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_gender"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimenDialogCard"
+                android:layout_margin="16dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardBackgroundColor="#FFF"
+                app:cardElevation="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/card_idNumber">
+
+                <TextView
+                    android:layout_width="@dimen/width_dialog_tv"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="@dimen/margin_vertical_tv_dialog"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="serif"
+                    android:text="Gender"
+                    android:textColor="#555"
+                    android:textSize="16dp" />
+
+                <Spinner
+                    android:id="@+id/spinnerGender"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/margin_start_et_dialog"
+                    android:layout_marginTop="5dp"
+                    android:entries="@array/gender"
+                    android:fontFamily="serif"
+                    android:textSize="16dp" />
+            </androidx.cardview.widget.CardView>
+
+            <!--card cell number-->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_cellNumber"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimenDialogCard"
+                android:layout_margin="16dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardBackgroundColor="#FFF"
+                app:cardElevation="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/card_gender">
+
+                <TextView
+                    android:layout_width="@dimen/width_dialog_tv"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="@dimen/margin_vertical_tv_dialog"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="serif"
+                    android:text="Cell Number"
+                    android:textColor="#555"
+                    android:textSize="16dp" />
+
+                <EditText
+                    android:id="@+id/etCellNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/margin_start_et_dialog"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="serif"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"
+                    android:text=""
+                    android:textColor="#555"
+                    android:textSize="16dp" />
+
+            </androidx.cardview.widget.CardView>
+
+            <!--card email number-->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_email"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimenDialogCard"
+                android:layout_margin="16dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardBackgroundColor="#FFF"
+                app:cardElevation="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/card_cellNumber">
+
+                <TextView
+                    android:layout_width="@dimen/width_dialog_tv"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="@dimen/margin_vertical_tv_dialog"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="serif"
+                    android:text="Email"
+                    android:textColor="#555"
+                    android:textSize="16dp" />
+
+                <EditText
+                    android:id="@+id/etEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/margin_start_et_dialog"
+                    android:layout_marginTop="5dp"
+                    android:ellipsize="end"
+                    android:fontFamily="serif"
+                    android:inputType="textEmailAddress"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="#555"
+                    android:textSize="16dp" />
+            </androidx.cardview.widget.CardView>
+
+            <!--card password-->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_password"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimenDialogCard"
+                android:layout_margin="16dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardBackgroundColor="#FFF"
+                app:cardElevation="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/card_email">
+
+                <TextView
+                    android:layout_width="@dimen/width_dialog_tv"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="@dimen/margin_vertical_tv_dialog"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="serif"
+                    android:text="Password"
+                    android:textColor="#555"
+                    android:textSize="16dp" />
+
+                <EditText
+                    android:id="@+id/etPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/margin_start_et_dialog"
+                    android:layout_marginTop="5dp"
+                    android:ellipsize="end"
+                    android:fontFamily="serif"
+                    android:inputType="textPassword"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="#555"
+                    android:textSize="16dp" />
+            </androidx.cardview.widget.CardView>
+
+            <!--card confirm password-->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_confirm_password"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimenDialogCard"
+                android:layout_margin="16dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardBackgroundColor="#FFF"
+                app:cardElevation="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/card_password">
+
+                <TextView
+                    android:layout_width="@dimen/width_dialog_tv"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="@dimen/margin_vertical_tv_dialog"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="serif"
+                    android:text="Confirm Pass"
+                    android:textColor="#555"
+                    android:textSize="16dp" />
+
+                <EditText
+                    android:id="@+id/etConfirmPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/margin_start_et_dialog"
+                    android:layout_marginTop="5dp"
+                    android:ellipsize="end"
+                    android:fontFamily="serif"
+                    android:inputType="textPassword"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="#555"
+                    android:textSize="16dp" />
+            </androidx.cardview.widget.CardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

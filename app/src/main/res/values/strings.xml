@@ -1,3 +1,44 @@
 <resources>
     <string name="app_name">Engineer dashboard</string>
+    <string name="action_settings">Settings</string>
+    <string name="nav_header_title">City-Fixer</string>
+    <string name="nav_header_subtitle">user@cityfixer.co.za</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+
+    <!--cell number array prefix-->
+    <string-array name="cellphone_prefix">
+        <!--06 prefix-->
+        <item>060</item>
+        <item>061</item>
+        <item>062</item>
+        <item>063</item>
+        <item>064</item>
+        <item>065</item>
+        <!--07 prefix-->
+        <item>071</item>
+        <item>072</item>
+        <item>073</item>
+        <item>074</item>
+        <item>076</item>
+        <item>078</item>
+        <item>079</item>
+        <!--08 prefix-->
+        <item>081</item>
+        <item>082</item>
+        <item>083</item>
+        <item>084</item>
+    </string-array>
+
+    <string-array name="gender">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
+    <string name="google_maps_key">AIzaSyDQelQoq0kdZwb6JVdqGTyOPcdjw-02PhE</string>
+    <string name="title_activity_reports">Reports</string>
+    <string name="search_hint">Filter by First or Last name</string>
+    <string name="action_search">Search users</string>
+
 </resources>
